@@ -16,11 +16,12 @@ BLACK = (0, 0, 0)
 GREEN = (0, 255, 0)
 BLOB_COLOR = (200, 200, 200)  # A slightly gray white for better visibility
 
-# Bird properties
-bird_width = 40
-bird_height = 40
+# Load the bird image
+bird_image = pygame.image.load('bird.jpg').convert_alpha()
+bird_width = bird_image.get_width()
+bird_height = bird_image.get_height()
 bird_x = 50
-bird_y = SCREEN_HEIGHT // 2
+bird_y = SCREEN_HEIGHT // 2 - bird_height // 2  # Adjust for the image's height
 bird_velocity = 0
 GRAVITY = 0.5
 
@@ -94,7 +95,7 @@ if game_start_screen():
         bird_y += bird_velocity
 
         # Check for collisions
-        if bird_y > SCREEN_HEIGHT - bird_height or bird_y < 0:
+        if bird_y > SCREEN_HEIGHT or bird_y < -bird_height:
             running = False
         
         pipes_to_remove = []
@@ -134,7 +135,7 @@ if game_start_screen():
             pipe.draw()
         for blob in blobs:  # Draw blobs after pipes
             blob.draw()
-        pygame.draw.rect(screen, BLACK, (bird_x, bird_y, bird_width, bird_height))
+        screen.blit(bird_image, (bird_x, bird_y))  # Draw the bird image
         font = pygame.font.Font(None, 36)
         text = font.render(f"Score: {score}", True, BLACK)
         screen.blit(text, (10, 10))
